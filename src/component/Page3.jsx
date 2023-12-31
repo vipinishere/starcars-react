@@ -1,6 +1,7 @@
 import React from 'react'
 
 function Page3() {
+  
   return (
     <div id="page3">
     <h2 id="page3-heading"><i className="ri-tools-fill"></i> Why Choose Us</h2>
