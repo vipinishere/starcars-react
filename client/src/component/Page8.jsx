@@ -1,9 +1,4 @@
 import React, { useLayoutEffect } from 'react'
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper';
-// Import Swiper styles
-import 'swiper/css';
 import MySwiper from './MySwiper';
 function Page8() {
   return (

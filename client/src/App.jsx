@@ -1,5 +1,4 @@
 import Home from "./component/Home"
-import MySwiper from "./component/MySwiper"
 import Signup from "./component/Signup"
 import {
   Route,
@@ -14,7 +13,6 @@ function App() {
     createRoutesFromElements(
       <Route path="/">
         <Route index element={<Home />} />
-        <Route path="swiper" element={<MySwiper />} />
         <Route path="signup" element={<Signup issignup={true} />} />
         <Route path="signin" element={<Signup issignup={false} />} />
       </Route>
