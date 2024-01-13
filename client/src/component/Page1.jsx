@@ -6,6 +6,11 @@ import { Link } from 'react-router-dom';
 function Page1() {
   const pageOneRef = useRef(null);
 
+  const makeCall = () =>{
+    const phoneNumber = "+1234567890";
+    window.location.href ="tel:"+ phoneNumber;
+  }
+  
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
       const t1 = gsap.timeline()
@@ -58,7 +63,7 @@ function Page1() {
       <div ref={pageOneRef} id="page1-content">
         <h1 id="pageOneTitle">Best <span className="auto-type" >Technicians</span></h1>
         <h5 id="pageOneSubtitle">A descriptive paragraph that tells clients how good you nare and proves that you are the best choice that they've made. This paragraph is also for those who are looking out for a reliable car repair.</h5>
-        <button id="call"><i className="ri-phone-fill"></i><span>EMERGENCY CALL 24/7</span></button>
+        <button id="call" onClick={makeCall}><i className="ri-phone-fill"></i><span>EMERGENCY CALL 24/7</span></button>
       </div>
     </div>
   )
