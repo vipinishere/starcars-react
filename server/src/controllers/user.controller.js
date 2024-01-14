@@ -7,7 +7,10 @@ import { validateEmail } from "../utils/validation.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { COOKIE_OPTIONS } from "../constants.js";
-import mongoose from "mongoose";
+import {
+	loginDataSchema,
+	registerDataSchema,
+} from "../utils/validationSchema.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
 	try {
@@ -37,26 +40,26 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res, next) => {
-	const { fullName, email, password } = req.body;
-	const avatarLocalPath = req.files?.avatar[0]?.path;
+	const data = registerDataSchema.safeParse(req.body);
+	const avatarLocalPath = req.file?.path;
 
-	if (!fullName || !email || !password) {
+	if (!data.success) {
 		if (avatarLocalPath) {
 			fs.unlinkSync(avatarLocalPath);
 		}
-		throw new ApiError(400, "Required Information is missing or invalid");
+
+		throw new ApiError(
+			403,
+			`${data.error.issues[0].path} ${data.error.issues[0].message}`,
+			data.error.issues
+		);
 	}
 
-	if (!validateEmail(email)) {
-		if (avatarLocalPath) {
-			fs.unlinkSync(avatarLocalPath);
-		}
-		throw new ApiError(400, "Email or Username is missing or invalid.", [
-			"Bad Request",
-		]);
-	}
+	const { fullName, email, phone, password } = data;
 
-	const existedUser = await User.findOne({ email });
+	const existedUser = await User.findOne({
+		$or: [{ email }, { phone }],
+	});
 
 	if (existedUser) {
 		if (avatarLocalPath) {
@@ -114,14 +117,20 @@ const loginUser = asyncHandler(async (req, res) => {
 	// password check
 	// access and refresh token
 	// send cookie
+	const data = loginDataSchema.safeParse(req.body);
 
-	const { email, password } = req.body;
-
-	if ([email, password].some((value) => value === "")) {
-		throw new ApiError(400, "Required Information is missing", ["Bad Request"]);
+	if (data.success) {
+		console.log(data);
+		throw new ApiError(
+			403,
+			`${data.error.issues[0].path} ${data.error.issues[0].message}`,
+			data.error.issues
+		);
 	}
 
-	const user = await User.findOne({ email });
+	const user = await User.findOne({
+		$or: [{ email }, { phone }],
+	});
 
 	if (!user) {
 		return res
