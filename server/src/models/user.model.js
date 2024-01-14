@@ -8,27 +8,20 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 			trim: true,
-			index: true,
-		},
-		email: {
-			type: String,
-			required: true,
-			unique: true,
-			lowercase: true,
-			trim: true,
-		},
-		avatar: {
-			type: String, // cloudinary url
-			required: true,
 		},
 		phone: {
 			type: String,
 			required: true,
+			unique: true
 		},
 		password: {
 			type: String,
 			required: [true, "Password is required"],
 		},
+		orders: [{
+			type: Schema.Types.ObjectId,
+			ref: "Order" 
+		}],
 		refreshToken: {
 			type: String,
 		},
